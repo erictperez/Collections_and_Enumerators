@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 
 namespace Collections_and_Enumerators
 {
-    public class MyList<T> //Requirements in Commments
+    public class MyList<T> : IEnumerable<T>         //Requirements in Commments
     {
         //Contains Ts
         T[] backingStore = new T[1];
@@ -33,7 +36,6 @@ namespace Collections_and_Enumerators
             }
 
         }
-
 
         //Indexer
         public T this[int index]
@@ -81,6 +83,7 @@ namespace Collections_and_Enumerators
             backingStore = tmp;
 
         }
+
         //Remove value at index
         public void RemoveAtIndex(int index)
         {
@@ -93,21 +96,44 @@ namespace Collections_and_Enumerators
             Length -= 1;
         }
 
-
-
-
         //Add value to end
         public void Add(T value)
         {
             GrowBackingArrayIfNeededToAddOneElement();
             backingStore[Length++] = value;
         }
+
         //Enumerable
+        public IEnumerator<T> GetEnumerator()
+        {
+            for (int i = 0; i < Length; i++)
+            {
+                yield return backingStore[i];
+            }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
     }
     class Program
     {
         static void Main(string[] args)
         {
+            var list = new MyList<int>();
+
+            list.Add(1);
+            list.Add(2);
+            list.Add(3);
+            list.Add(4);
+            list.Add(5);
+
+            foreach(var v in list.Reverse().Select(i => i * 2))
+            {
+                Console.WriteLine(v);
+            }
 
         }
     }
