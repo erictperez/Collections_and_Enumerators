@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Collections_and_Enumerators
 {
-    public class MyList //Requirements in Commments
+    public class MyList<T> //Requirements in Commments
     {
-        //Contain integers
-        int[] backingStore = new int [1];
+        //Contains Ts
+        T[] backingStore = new T[1];
 
-        //Track the number of intergers currently stored
+        //Track the number of Ts currently stored
         public int Length { get; private set; } = 0;
         public int Capacity => backingStore.Length;
 
@@ -20,7 +20,7 @@ namespace Collections_and_Enumerators
             {
 
                 //If so, make a new, larger array
-                var tmp = new int[backingStore.Length * 2];
+                var tmp = new T[backingStore.Length * 2];
 
                 //Copy the values from the old array into the new array
                 for (int i = 0; i < backingStore.Length; i++)
@@ -36,7 +36,7 @@ namespace Collections_and_Enumerators
 
 
         //Indexer
-        public int this[int index]
+        public T this[int index]
         {
             //Get and set value at index
             get => index < Length ? backingStore[index] : throw new IndexOutOfRangeException();
@@ -54,7 +54,7 @@ namespace Collections_and_Enumerators
         }
 
         //Add value at index
-        public void AddAtIndex(int index, int value)
+        public void AddAtIndex(int index, T value)
         {
             //Only if the index is within the bounds of the current list,
             if(index < Length)
@@ -74,13 +74,14 @@ namespace Collections_and_Enumerators
         }
         public void Shrink()
         {
-            var tmp = new int[Length];
+            var tmp = new T[Length];
 
             Array.Copy(backingStore, tmp, Length);
 
             backingStore = tmp;
 
         }
+        //Remove value at index
         public void RemoveAtIndex(int index)
         {
             while(index + 1 < Length)
@@ -93,11 +94,10 @@ namespace Collections_and_Enumerators
         }
 
 
-        //Remove value at index
 
 
         //Add value to end
-        public void Add(int value)
+        public void Add(T value)
         {
             GrowBackingArrayIfNeededToAddOneElement();
             backingStore[Length++] = value;
@@ -108,9 +108,7 @@ namespace Collections_and_Enumerators
     {
         static void Main(string[] args)
         {
-            var myList = new MyList();
 
-            myList[0] = 3;
         }
     }
 }
