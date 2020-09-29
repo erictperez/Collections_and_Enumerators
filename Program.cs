@@ -3,16 +3,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Collections_and_Enumerators
 {
-    class MyList //Requirements in Commments
+    public class MyList //Requirements in Commments
     {
         //Contain integers
         int[] backingStore = new int [1];
 
         //Track the number of intergers currently stored
         public int Length { get; private set; } = 0;
+        public int Capacity => backingStore.Length;
 
         //Grow the backing array when needed
-        private void GrowBackingArrayIfNeeded()
+        private void GrowBackingArrayIfNeededToAddOneElement()
         {
             //Determine whether the array needs to be grown
             if (Length == backingStore.Length)
@@ -32,6 +33,8 @@ namespace Collections_and_Enumerators
             }
 
         }
+
+
         //Indexer
         public int this[int index]
         {
@@ -57,23 +60,48 @@ namespace Collections_and_Enumerators
             if(index < Length)
             {
                 // Move all the elements in or after the index to the "right"
-                Length += 1;
-                GrowBackingArrayIfNeeded();
+                GrowBackingArrayIfNeededToAddOneElement();
 
                 for (int i = Length; i > index; i--)
                 {
-
+                    backingStore[i] = backingStore[i - 1];
                 }
                   //Put the new value in the array
-                  backingStore[index] = value;
-
+                backingStore[index] = value;
+                Length += 1;
             }
             
         }
+        public void Shrink()
+        {
+            var tmp = new int[Length];
+
+            Array.Copy(backingStore, tmp, Length);
+
+            backingStore = tmp;
+
+        }
+        public void RemoveAtIndex(int index)
+        {
+            while(index + 1 < Length)
+            {
+                backingStore[index++] = backingStore[index + 1];
+                index += 1;
+            }
+
+            Length -= 1;
+        }
+
+
         //Remove value at index
 
-        //Add value to end
 
+        //Add value to end
+        public void Add(int value)
+        {
+            GrowBackingArrayIfNeededToAddOneElement();
+            backingStore[Length++] = value;
+        }
         //Enumerable
     }
     class Program
